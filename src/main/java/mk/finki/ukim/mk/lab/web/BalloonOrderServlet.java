@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.lab.web;
 
 import mk.finki.ukim.mk.lab.model.Balloon;
+import mk.finki.ukim.mk.lab.repository.BalloonRepository;
 import mk.finki.ukim.mk.lab.service.OrderService;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -25,7 +26,8 @@ public class BalloonOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        resp.setContentType("text/html;charset=UTF-8");
+        context.setVariable("balloonColor", BalloonRepository.orders.getBalloonColor());
+        context.setVariable("balloonSize", BalloonRepository.orders.getBalloonSize());
         templateEngine.process("deliveryInfo.html", context, resp.getWriter());
     }
 

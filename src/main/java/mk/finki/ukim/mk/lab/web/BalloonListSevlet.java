@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.lab.web;
 
 import mk.finki.ukim.mk.lab.model.Balloon;
+import mk.finki.ukim.mk.lab.repository.BalloonRepository;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -12,12 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "balloon-list-servlet", urlPatterns = "/")
-class BalloonListServlet extends HttpServlet {
+@WebServlet(name = "balloon-list-servlet", urlPatterns = "")
+class BalloonListSevlet extends HttpServlet {
     private final BalloonService balloonService;
     private final SpringTemplateEngine templateEngine;
 
-    BalloonListServlet(BalloonService balloonService, SpringTemplateEngine templateEngine) {
+    BalloonListSevlet(BalloonService balloonService, SpringTemplateEngine templateEngine) {
         this.balloonService = balloonService;
         this.templateEngine = templateEngine;
     }
@@ -39,12 +40,10 @@ class BalloonListServlet extends HttpServlet {
             context.setVariable("error", "Please select a balloon.");
             resp.setContentType("text/html;charset=UTF-8");
             templateEngine.process("listBalloons.html", context, resp.getWriter());
-            resp.sendRedirect("/");
         }
-        String name = req.getParameter("color").split(" ")[0];
 
-        Balloon b = new Balloon(name, desc);
-        req.getSession().setAttribute("balloon", b);
+        String color = req.getParameter("color");
+        BalloonRepository.orders.setBalloonColor(color);
         resp.sendRedirect("/selectBalloon");
     }
 }
